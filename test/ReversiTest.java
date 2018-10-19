@@ -1,10 +1,8 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -29,12 +27,14 @@ public class ReversiTest {
 
 
     @Test
-    public void makeMover_GivenTestBoard_ReturnsExpectedBoard(){
+    public void run_GivenTestBoard_ReturnsExpectedBoard(){
+        // runs through all test cases
         for (Object object: jsonArray){
+            // inits the initial test data
             JSONObject testCase = (JSONObject) object;
             JSONObject input = (JSONObject) testCase.get("input");
             JSONObject expected = (JSONObject) testCase.get("expected");
-
+            // creates the output file
             File output = new File("output.json");
             try {
                 output.createNewFile();
@@ -42,8 +42,9 @@ public class ReversiTest {
                 e.printStackTrace();
             }
 
-
             testSolution.run(input, output);
+
+            // gets the returned JSON board
             JSONObject actual;
             try {
                 actual = (JSONObject) (new JSONParser().parse(new FileReader(output)));
@@ -51,6 +52,7 @@ public class ReversiTest {
                 e.printStackTrace();
                 throw new IllegalArgumentException("bad file");
             }
+
             Assert.assertEquals(expected, actual);
         }
     }
